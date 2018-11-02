@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: mysql:mysql-connector-javajpa:unknown">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/mysql/mysql-connector-javajpa/unknown/mysql-connector-javajpa-unknown.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/mysql/mysql-connector-javajpa/unknown/mysql-connector-javajpa-unknown-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/mysql/mysql-connector-javajpa/unknown/mysql-connector-javajpa-unknown-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

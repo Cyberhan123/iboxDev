@@ -1,4 +1,7 @@
 package cn.hselfweb.ibox.ibox.db;
 
-public interface FoodRepository {
+import org.springframework.data.repository.Repository;
+
+public interface FoodRepository extends Repository<Food,Long> {
+
 }

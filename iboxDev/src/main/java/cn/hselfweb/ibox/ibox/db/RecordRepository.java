@@ -1,4 +1,9 @@
 package cn.hselfweb.ibox.ibox.db;
 
-public interface RecordRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface RecordRepository extends JpaRepository<Record,Long> {
+    List<Record> findAllByIceIdAndOpFlag(String macip,Long opFlag);
 }

@@ -21,5 +21,4 @@ public class FamilyController {
         List<Family> families = familyRepository.findAll();
         return families;
     }
-
 }

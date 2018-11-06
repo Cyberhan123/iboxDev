@@ -3,13 +3,11 @@ package cn.hselfweb.ibox.db;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@IdClass(RecordKey.class)
 @Getter
 @Setter
 @Table(name = "record")
@@ -23,7 +21,6 @@ public class Record {
     @Id
     @Column(name = "ice_id")
     private Long iceId;
-
 
     @Id
     @Column(name = "fid")
@@ -41,7 +38,7 @@ public class Record {
     @Column(name = "foodweight")
     private String foodWeight;//食物重
 
-    public Long getUuid(){
+    public Long getUuid() {
         return this.uuid;
     }
 }

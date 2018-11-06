@@ -25,21 +25,21 @@ public class FoodController {
 
     @Autowired
     private OfficialCardRepository officialCardRepository;
+//
+//    @RequestMapping("/getallfoodlist")
+//    @ResponseBody
+//    public String getAllFoodlist(String macip){
+//        List<Record> recordList = recordRepository.findAllByIceIdAndOpFlag(macip,0);
+//        for(int i = 0; i < recordList.size(); i++){
+//            Long uuid = recordList.get(i).getUuid();
+//            Optional<OfficialCard> = officialCardRepository.findById(uuid);
+//        }
+//
+//        return
+//    }
 
-    @RequestMapping("/getallfoodlist")
-    @ResponseBody
-    public String getAllFoodlist(String macip){
-        List<Record> recordList = recordRepository.findAllByIceIdAndOpFlag(macip,0);
-        for(int i = 0; i < recordList.size(); i++){
-            Long uuid = recordList.get(i).getUuid();
-            Optional<OfficialCard> = officialCardRepository.findById(uuid);
-        }
-
-        return
-    }
-
-    @RequestMapping("/",method = RequestMethod.POST){
-
-    }
+//    @RequestMapping("/",method = RequestMethod.POST){
+//
+//    }
 
 }

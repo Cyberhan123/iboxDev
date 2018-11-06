@@ -1,4 +1,4 @@
-package cn.hselfweb.ibox.ibox.bean;
+package cn.hselfweb.ibox.bean;
 
 import lombok.Getter;
 import lombok.Setter;

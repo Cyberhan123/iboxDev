@@ -1,4 +1,4 @@
-package cn.hselfweb.ibox.ibox;
+package cn.hselfweb.ibox;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,6 +1,6 @@
-package cn.hselfweb.ibox.ibox.ctr;
+package cn.hselfweb.ibox.ctr;
 
-import cn.hselfweb.ibox.ibox.db.*;
+import cn.hselfweb.ibox.db.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

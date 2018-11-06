@@ -1,4 +1,4 @@
-package cn.hselfweb.ibox.ibox.db;
+package cn.hselfweb.ibox.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

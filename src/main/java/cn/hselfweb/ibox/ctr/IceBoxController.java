@@ -1,7 +1,7 @@
-package cn.hselfweb.ibox.ibox.ctr;
+package cn.hselfweb.ibox.ctr;
 
-import cn.hselfweb.ibox.ibox.db.IceBox;
-import cn.hselfweb.ibox.ibox.db.IceBoxRepository;
+import cn.hselfweb.ibox.db.IceBox;
+import cn.hselfweb.ibox.db.IceBoxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

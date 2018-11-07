@@ -9,9 +9,11 @@ import java.util.Date;
 public class FoodInfo {
     private String foodName;
     private String foodUrl;
-    private String parentFoodUrl;
-    private String parentFoodNmae;
+    private String foodPhotoUrl;
+    private String comment;
     private Long weight;
     private Date startTime;//存入日期
     private Long type;//存储方式
+    private double percent;//保质期占比
+    //private Long
 }

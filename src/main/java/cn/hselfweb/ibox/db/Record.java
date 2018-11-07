@@ -20,7 +20,7 @@ public class Record {
 
     @Id
     @Column(name = "ice_id")
-    private Long iceId;
+    private String iceId;
 
     @Id
     @Column(name = "fid")
@@ -38,7 +38,6 @@ public class Record {
     @Column(name = "foodweight")
     private String foodWeight;//食物重
 
-    public Long getUuid() {
-        return this.uuid;
-    }
+    @Column(name = "foodphoto")
+    private String foodPhoto;//食物照片
 }

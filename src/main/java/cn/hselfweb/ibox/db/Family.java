@@ -19,4 +19,5 @@ public class Family {
 
     @Column(name = "name")
     private String name;
+
 }

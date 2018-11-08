@@ -3,31 +3,38 @@ package cn.hselfweb.ibox.ctr;
 import cn.hselfweb.ibox.bean.FoodInfo;
 import cn.hselfweb.ibox.db.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.smartcardio.Card;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
-@RestController
-@RequestMapping("/Food")
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
+@RepositoryRestController
 public class FoodController {
 
-    @Autowired
-    private FoodRepository foodRepository;
+
+    private final FoodRepository foodRepository;
+
+
+    private final RecordRepository recordRepository;
+
+
+    private final OfficialCardRepository officialCardRepository;
 
     @Autowired
-    private RecordRepository recordRepository;
+    public FoodController(FoodRepository foodRepository,RecordRepository recordRepository,OfficialCardRepository officialCardRepository){
+        this.foodRepository=foodRepository;
+        this.officialCardRepository=officialCardRepository;
+        this.recordRepository=recordRepository;
+    }
 
-    @Autowired
-    private OfficialCardRepository officialCardRepository;
+    @RequestMapping(value = "/foods/getallfoodlist/{macip}",method =RequestMethod.GET)
+    public  @ResponseBody ResponseEntity<?>  getAllFoodlist(@PathVariable("macip") String macip) {
 
-    @RequestMapping("/getallfoodlist")
-    @ResponseBody
-    public List<FoodInfo> getAllFoodlist(String macip) {
-
-        List<FoodInfo> foodInfoList = new ArrayList<FoodInfo>();
+        List<FoodInfo> foodInfoList = new ArrayList<>();
         List<Record> recordList = recordRepository.findAllByIceId(macip);
         for (Record data : recordList) {
             System.out.println(data.getUuid());
@@ -61,7 +68,9 @@ public class FoodController {
                 foodInfoList.add(foodInfo);
             }
         }
-        return foodInfoList;
+        Resources<FoodInfo> resources=new Resources<>(foodInfoList);
+        resources.add(linkTo(methodOn(FoodController.class).getAllFoodlist(macip)).withSelfRel());
+        return ResponseEntity.ok(resources);
     }
 
     public static List<Record> removeDuplicateOrder(List<Record> orderList) {
@@ -75,4 +84,24 @@ public class FoodController {
         set.addAll(orderList);
         return new ArrayList<Record>(set);
     }
+
+    @RequestMapping(value ="/putFoodDataIn/{vision}/{macip}/{UUId}/{comment}/{startTime}/{type}/{opFlag}/{foodUrl}/{foodWeight}/{taretWeight}" ,method= RequestMethod.POST)
+    @ResponseBody
+    public String putFoodData(
+            @PathVariable("vision") String vision,
+            @PathVariable("macip") String macip,
+            @PathVariable("UUId") String uuid,
+            @PathVariable("comment") String comment,
+            @PathVariable("startTime") Long startTime,
+            @PathVariable("type") String type ,
+            @PathVariable("opFlag") String opFlag,
+            @PathVariable("foodPhoto") Long foodUrl,
+            @PathVariable("foodWeight") Long foodWeight,
+            @PathVariable("tareWeight") Long taretW
+    ){
+        System.out.print(vision);
+        return "success";
+    }
+
+
 }

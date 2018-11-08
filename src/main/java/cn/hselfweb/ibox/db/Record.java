@@ -33,10 +33,10 @@ public class Record {
     private Date opDate;//操作时间
 
     @Column(name = "tareweight")
-    private String tareWeight;//皮重
+    private Long tareWeight;//皮重
 
     @Column(name = "foodweight")
-    private String foodWeight;//食物重
+    private Long foodWeight;//食物重
 
     @Column(name = "foodphoto")
     private String foodPhoto;//食物照片

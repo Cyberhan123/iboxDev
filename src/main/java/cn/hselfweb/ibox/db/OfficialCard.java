@@ -16,7 +16,7 @@ public class OfficialCard {
 
     @Id
     @Column(name = "uuid")
-    private Long uuid;
+    private String uuid;
 
     @Column(name = "foodid")
     private Long foodId;

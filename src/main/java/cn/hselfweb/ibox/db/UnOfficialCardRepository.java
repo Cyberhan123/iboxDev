@@ -1,4 +1,7 @@
 package cn.hselfweb.ibox.db;
 
-public interface UnOfficialCardRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UnOfficialCardRepository extends JpaRepository<UnOfficialCard,Long>{
+    UnOfficialCard getByUuid(String uuid);
 }

@@ -15,8 +15,7 @@ public class Record {
 
     @Id
     @Column(name = "uuid")
-    private Long uuid;
-
+    private String uuid;
 
     @Id
     @Column(name = "ice_id")

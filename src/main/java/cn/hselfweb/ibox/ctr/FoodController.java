@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
+import static javax.swing.UIManager.get;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -24,11 +25,15 @@ public class FoodController {
 
     private final OfficialCardRepository officialCardRepository;
 
+
+    private final UnOfficialCardRepository unOfficialCardRepository;
+
     @Autowired
-    public FoodController(FoodRepository foodRepository,RecordRepository recordRepository,OfficialCardRepository officialCardRepository){
+    public FoodController(FoodRepository foodRepository,RecordRepository recordRepository,OfficialCardRepository officialCardRepository,UnOfficialCardRepository unOfficialCardRepository){
         this.foodRepository=foodRepository;
         this.officialCardRepository=officialCardRepository;
         this.recordRepository=recordRepository;
+        this.unOfficialCardRepository = unOfficialCardRepository;
     }
 
     @RequestMapping(value = "/foods/getallfoodlist/{macip}",method =RequestMethod.GET)
@@ -40,32 +45,53 @@ public class FoodController {
             System.out.println(data.getUuid());
         }
         recordList = removeDuplicateOrder(recordList);
-        Long b =12L;
 
         for (int i = 0; i < recordList.size(); i++) {
-            Long uuid = recordList.get(i).getUuid();
+            String uuid = recordList.get(i).getUuid();
             System.out.println("第 uuid"+i+recordList.get(i).getUuid());
             List<OfficialCard> officialCard = officialCardRepository.getOfficialCardByUuidIs(uuid);
-            //System.out.println(officialCard.toString());
-            Long foodId = officialCard.get(0).getFoodId();
-            System.out.println("第 foodid"+i+foodId);
-            FoodInfo foodInfo = new FoodInfo();
-            Food food = foodRepository.getAllByFoodId(foodId);
-            if(food.getFoodWeight() == 0){
-                officialCard.remove(i);
+            if(officialCard.size() == 0){
+                System.out.println("官方卡里没有找到");
+                UnOfficialCard unOfficialCard = unOfficialCardRepository.getByUuid(uuid);
+                System.out.println(unOfficialCard.getFoodWeight());
+                FoodInfo foodInfo = new FoodInfo();
+                if(unOfficialCard.getFoodWeight() > 0){
+                    foodInfo.setWeight(unOfficialCard.getFoodWeight());
+                    foodInfo.setFoodName(unOfficialCard.getFoodName());
+                    foodInfo.setFoodUrl(unOfficialCard.getFoodUrl());
+                    foodInfo.setType(unOfficialCard.getType());
+                    foodInfo.setTime(unOfficialCard.getFoodTime());
+                    foodInfo.setPercent(unOfficialCard.getPercent());
+                    List<Record> records = recordRepository.findByUuidOrderByOpDateDesc(uuid);
+                    Date OpDate = records.get(0).getOpDate();
+                    foodInfo.setStartTime(OpDate);
+                    foodInfo.setFoodPhotoUrl(records.get(0).getFoodPhoto());
+                    foodInfoList.add(foodInfo);
+                }
+
             }else{
-                foodInfo.setWeight(food.getFoodWeight());//食材重量
-                foodInfo.setFoodName(food.getFoodName());//食材二级分类
-                foodInfo.setFoodUrl(food.getFoodUrl());//二级分类图标
-                Long day = food.getFoodTime();//用于计算保质期
-                foodInfo.setComment(food.getComment());//食材描述
-                foodInfo.setType(food.getType());//存储方式
-                foodInfo.setPercent((food.getPercent()));
-                List<Record> records = recordRepository.findByUuidOrderByOpDateDesc(uuid);
-                Date OpDate = records.get(0).getOpDate();
-                foodInfo.setStartTime(OpDate);
-                foodInfo.setFoodPhotoUrl(records.get(0).getFoodPhoto());
-                foodInfoList.add(foodInfo);
+                //System.out.println(officialCard.toString());
+                Long foodId = officialCard.get(0).getFoodId();
+                System.out.println("第 foodid"+i+foodId);
+                FoodInfo foodInfo = new FoodInfo();
+                Food food = foodRepository.getAllByFoodId(foodId);
+                if(food.getFoodWeight() == 0){
+                    officialCard.remove(i);
+                }else{
+                    foodInfo.setWeight(food.getFoodWeight());//食材重量
+                    foodInfo.setFoodName(food.getFoodName());//食材二级分类
+                    foodInfo.setFoodUrl(food.getFoodUrl());//二级分类图标
+                    Long day = food.getFoodTime();//用于计算保质期
+                    foodInfo.setComment(food.getComment());//食材描述
+                    foodInfo.setType(food.getType());//存储方式
+                    foodInfo.setTime(food.getFoodTime());
+                    foodInfo.setPercent((food.getPercent()));
+                    List<Record> records = recordRepository.findByUuidOrderByOpDateDesc(uuid);
+                    Date OpDate = records.get(0).getOpDate();
+                    foodInfo.setStartTime(OpDate);
+                    foodInfo.setFoodPhotoUrl(records.get(0).getFoodPhoto());
+                    foodInfoList.add(foodInfo);
+                }
             }
         }
         Resources<FoodInfo> resources=new Resources<>(foodInfoList);

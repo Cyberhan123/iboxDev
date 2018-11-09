@@ -16,7 +16,7 @@ import java.util.Date;
 public class UnOfficialCard {
     @Id
     @Column(name = "uuid")
-    private Long uuid;
+    private String uuid;
 
     @Column(name = "fid")
     private Long fid;
@@ -27,9 +27,15 @@ public class UnOfficialCard {
     @Column(name = "type")
     private Long type;
 
-    @Column(name = "start_time")
-    private Date start_time;
+    @Column(name = "food_time")
+    private Long foodTime;
 
     @Column(name = "food_name")
     private String foodName;
+
+    @Column(name = "food_weight")
+    private Long foodWeight;
+
+    @Column(name = "percent")
+    private double percent;
 }

@@ -7,5 +7,5 @@ import java.util.List;
 public interface RecordRepository extends JpaRepository<Record,RecordKey> {
     //List<Record> findByIceIdAndOpFlag(String macip,Long opFlag);
     List<Record> findAllByIceId(String macip);
-    List<Record> findByUuidOrderByOpDateDesc(Long uuid);
+    List<Record> findByUuidOrderByOpDateDesc(String uuid);
 }

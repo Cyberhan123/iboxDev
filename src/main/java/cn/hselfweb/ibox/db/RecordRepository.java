@@ -8,4 +8,6 @@ public interface RecordRepository extends JpaRepository<Record,RecordKey> {
     //List<Record> findByIceIdAndOpFlag(String macip,Long opFlag);
     List<Record> findAllByIceId(String macip);
     List<Record> findByUuidOrderByOpDateDesc(Long uuid);
+
+     Record save(Record record);
 }

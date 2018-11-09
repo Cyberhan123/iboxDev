@@ -7,6 +7,7 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -25,14 +26,15 @@ public class FoodController {
     private final OfficialCardRepository officialCardRepository;
 
     @Autowired
-    public FoodController(FoodRepository foodRepository,RecordRepository recordRepository,OfficialCardRepository officialCardRepository){
-        this.foodRepository=foodRepository;
-        this.officialCardRepository=officialCardRepository;
-        this.recordRepository=recordRepository;
+    public FoodController(FoodRepository foodRepository, RecordRepository recordRepository, OfficialCardRepository officialCardRepository) {
+        this.foodRepository = foodRepository;
+        this.officialCardRepository = officialCardRepository;
+        this.recordRepository = recordRepository;
     }
 
-    @RequestMapping(value = "/foods/getallfoodlist/{macip}",method =RequestMethod.GET)
-    public  @ResponseBody ResponseEntity<?>  getAllFoodlist(@PathVariable("macip") String macip) {
+    @RequestMapping(value = "/foods/getallfoodlist/{macip}", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<?> getAllFoodlist(@PathVariable("macip") String macip) {
 
         List<FoodInfo> foodInfoList = new ArrayList<>();
         List<Record> recordList = recordRepository.findAllByIceId(macip);
@@ -40,20 +42,20 @@ public class FoodController {
             System.out.println(data.getUuid());
         }
         recordList = removeDuplicateOrder(recordList);
-        Long b =12L;
+        Long b = 12L;
 
         for (int i = 0; i < recordList.size(); i++) {
             Long uuid = recordList.get(i).getUuid();
-            System.out.println("第 uuid"+i+recordList.get(i).getUuid());
+            System.out.println("第 uuid" + i + recordList.get(i).getUuid());
             List<OfficialCard> officialCard = officialCardRepository.getOfficialCardByUuidIs(uuid);
             //System.out.println(officialCard.toString());
             Long foodId = officialCard.get(0).getFoodId();
-            System.out.println("第 foodid"+i+foodId);
+            System.out.println("第 foodid" + i + foodId);
             FoodInfo foodInfo = new FoodInfo();
             Food food = foodRepository.getAllByFoodId(foodId);
-            if(food.getFoodWeight() == 0){
+            if (food.getFoodWeight() == 0) {
                 officialCard.remove(i);
-            }else{
+            } else {
                 foodInfo.setWeight(food.getFoodWeight());//食材重量
                 foodInfo.setFoodName(food.getFoodName());//食材二级分类
                 foodInfo.setFoodUrl(food.getFoodUrl());//二级分类图标
@@ -68,7 +70,7 @@ public class FoodController {
                 foodInfoList.add(foodInfo);
             }
         }
-        Resources<FoodInfo> resources=new Resources<>(foodInfoList);
+        Resources<FoodInfo> resources = new Resources<>(foodInfoList);
         resources.add(linkTo(methodOn(FoodController.class).getAllFoodlist(macip)).withSelfRel());
         return ResponseEntity.ok(resources);
     }
@@ -85,23 +87,24 @@ public class FoodController {
         return new ArrayList<Record>(set);
     }
 
-    @RequestMapping(value ="/putFoodDataIn/{vision}/{macip}/{UUId}/{comment}/{startTime}/{type}/{opFlag}/{foodUrl}/{foodWeight}/{taretWeight}" ,method= RequestMethod.POST)
-    @ResponseBody
-    public String putFoodData(
-            @PathVariable("vision") String vision,
-            @PathVariable("macip") String macip,
-            @PathVariable("UUId") String uuid,
-            @PathVariable("comment") String comment,
-            @PathVariable("startTime") Long startTime,
-            @PathVariable("type") String type ,
-            @PathVariable("opFlag") String opFlag,
-            @PathVariable("foodPhoto") Long foodUrl,
-            @PathVariable("foodWeight") Long foodWeight,
-            @PathVariable("tareWeight") Long taretW
-    ){
-        System.out.print(vision);
-        return "success";
-    }
-
-
+//    @RequestMapping(value = "/foods/putFoodDataIn/{vision}/{macip}/{UUId}/{comment}/{startTime}/{type}/{opFlag}/{foodphoto}/{foodWeight}/{taretWeight}", method = RequestMethod.GET)
+//    public @ResponseBody
+//    ResponseEntity<?> putFoodData(
+//            @PathVariable("vision") String vision,
+//            @PathVariable("macip") String macip,
+//            @PathVariable("UUId") String uuid,
+//            @PathVariable("comment") String comment,
+//            @PathVariable("startTime") Long startTime,
+//            @PathVariable("type") String type,
+//            @PathVariable("opFlag") String opFlag,
+//            @PathVariable("foodphoto") Long foodPhoto,
+//            @PathVariable("foodWeight") Long foodWeight,
+//            @PathVariable("taretWeight") Long taretWeight
+//    ) {
+//
+////        Resources<String> resources=new Resources<String>(message);
+////        resources.add(linkTo(methodOn(FoodController.class).putFoodData(vision, macip, uuid, comment, startTime, type, opFlag, foodPhoto, foodWeight, taretWeight)).withSelfRel());
+////        return ResponseEntity.ok(resources);
+//        return new Resources<String>("123");
+//    }
 }

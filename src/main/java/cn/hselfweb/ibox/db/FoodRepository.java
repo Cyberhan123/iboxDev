@@ -4,6 +4,8 @@ import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
-public interface FoodRepository extends Repository<Food,Long> {
+public interface FoodRepository extends Repository<Food, Long> {
     Food getAllByFoodId(Long foodId);
+
+    Food save(Food food);
 }

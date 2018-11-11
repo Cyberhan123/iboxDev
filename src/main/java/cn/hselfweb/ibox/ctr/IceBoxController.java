@@ -51,6 +51,7 @@ public class IceBoxController {
         System.out.println(users.get(0).getUid());
         for(int i = 0; i < users.size(); i++){
             User user = users.get(i);
+            user.setPassword("*****");
             IceOrder iceOrder = new IceOrder();
             iceOrder.setUser(user);
             System.out.println(user.getUid());

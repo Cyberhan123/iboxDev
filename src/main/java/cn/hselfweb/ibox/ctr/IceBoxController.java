@@ -46,7 +46,7 @@ public class IceBoxController {
         Long fid = iceBox.getFid();
         Family family = familyRepository.getOne(fid);
         Long uid = family.getUid();
-        //System.out.println(uid);
+        System.out.println("管理员uid:"+uid);
         List<User> users = userRepository.getAllByFid(fid);
         System.out.println(users.get(0).getUid());
         for(int i = 0; i < users.size(); i++){
@@ -54,7 +54,7 @@ public class IceBoxController {
             IceOrder iceOrder = new IceOrder();
             iceOrder.setUser(user);
             System.out.println(user.getUid());
-            if(user.getUid() != uid){
+            if(user.getUid().equals(uid)){
                 iceOrder.setAdmin(0);
                 System.out.println("***");
             }else{

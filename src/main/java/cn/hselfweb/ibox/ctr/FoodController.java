@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -38,6 +40,18 @@ public class FoodController {
         this.recordRepository = recordRepository;
         this.unOfficialCardRepository = unOfficialCardRepository;
         this.iceBoxRepository = iceBoxRepository;
+    }
+
+    private static List<Record> removeDuplicateOrder(List<Record> orderList) {
+        Set<Record> set = new TreeSet<Record>(new Comparator<Record>() {
+            @Override
+            public int compare(Record a, Record b) {
+                // 字符串则按照asicc码升序排列
+                return a.getUuid().compareTo(b.getUuid());
+            }
+        });
+        set.addAll(orderList);
+        return new ArrayList<Record>(set);
     }
 
     @RequestMapping(value = "/foods/getallfoodlist/{macip}", method = RequestMethod.GET)
@@ -102,18 +116,6 @@ public class FoodController {
         Resources<FoodInfo> resources = new Resources<>(foodInfoList);
         resources.add(linkTo(methodOn(FoodController.class).getAllFoodlist(macip)).withSelfRel());
         return ResponseEntity.ok(resources);
-    }
-
-    private static List<Record> removeDuplicateOrder(List<Record> orderList) {
-        Set<Record> set = new TreeSet<Record>(new Comparator<Record>() {
-            @Override
-            public int compare(Record a, Record b) {
-                // 字符串则按照asicc码升序排列
-                return a.getUuid().compareTo(b.getUuid());
-            }
-        });
-        set.addAll(orderList);
-        return new ArrayList<Record>(set);
     }
 
     /**
@@ -196,12 +198,12 @@ public class FoodController {
             record.setFoodPhoto(foodPhoto);
             recordRepository.save(record);
             message.add("success");
-            Resources<String> resources = new Resources<String>(message);
+            Resources<String> resources = new Resources<>(message);
             resources.add(linkTo(methodOn(FoodController.class).putFoodData(vision, macip, foodName, uuid, comment, foodTime, type, opFlag, opDate, foodParent, foodPhoto, foodWeight, foodPercent, taretWeight)).withSelfRel());
             return ResponseEntity.ok(resources);
         } else {
-            message.add("unsuccess");
-            Resources<String> resources = new Resources<String>(message);
+            message.add("please input right version for current api");
+            Resources<String> resources = new Resources<>(message);
             resources.add(linkTo(methodOn(FoodController.class).putFoodData(vision, macip, foodName, uuid, comment, foodTime, type, opFlag, opDate, foodParent, foodPhoto, foodWeight, foodPercent, taretWeight)).withSelfRel());
             return ResponseEntity.ok(resources);
         }

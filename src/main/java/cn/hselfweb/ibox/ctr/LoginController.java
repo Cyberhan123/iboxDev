@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,24 +18,24 @@ public class LoginController {
     private final UserRepository userRepository;
 
     @Autowired
-    public LoginController(UserRepository userRepository){
+    public LoginController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(value = "/login/{tel}{password}",method = RequestMethod.GET)
+    @RequestMapping(value = "/login/{tel}{password}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String,Object> login(String tel, String password, HttpServletRequest request){
+    public Map<String, Object> login(String tel, String password, HttpServletRequest request) {
 
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
         User user = userRepository.getByTel(tel);
-        if(user == null){
-            map.put("msg","用户名不存在");
+        if (user == null) {
+            map.put("msg", "用户名不存在");
             return map;
         }
 
-        User user0 = userRepository.getByTelAndPassword(tel,password);
-        if(user0 == null){
-            map.put("msg","用户名或密码错误");
+        User user0 = userRepository.getByTelAndPassword(tel, password);
+        if (user0 == null) {
+            map.put("msg", "用户名或密码错误");
             return map;
         }
 
@@ -44,7 +43,7 @@ public class LoginController {
         return map;
     }
 
-    public String addLoginToken(Long uid){
+    public String addLoginToken(Long uid) {
         return "";
     }
 }

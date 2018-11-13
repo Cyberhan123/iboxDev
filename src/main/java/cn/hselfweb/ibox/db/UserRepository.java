@@ -7,4 +7,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> getAllByFid(Long fid);
     User save(User user);
+    User getByTelAndPassword(String tel,String password);
+    User getByTel(String tel);
 }

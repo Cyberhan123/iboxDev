@@ -4,11 +4,16 @@ import cn.hselfweb.ibox.db.User;
 import cn.hselfweb.ibox.db.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,5 +50,13 @@ public class LoginController {
 
     public String addLoginToken(Long uid) {
         return "";
+    }
+    @RequestMapping("login/log/{username}/{password}")
+    public @ResponseBody String log(
+            @PathVariable("username") String username,
+            @PathVariable("password") String password
+    ){
+        HttpHeaders headers=new HttpHeaders();
+        return "succsess";
     }
 }

@@ -16,7 +16,10 @@ public class WebConfig extends WebMvcConfigurationSupport {
                 "/api/**"
         };
         //不需要拦截的路径
-        String[] excludePathPatterns = {};
+        String[] excludePathPatterns = {
+                "/api/login",
+                "/api/register"
+        };
 
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns(addPathPatterns).excludePathPatterns(excludePathPatterns);
     }

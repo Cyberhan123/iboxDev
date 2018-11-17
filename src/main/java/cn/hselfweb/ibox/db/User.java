@@ -7,10 +7,7 @@ import lombok.ToString;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -29,6 +26,7 @@ public class User {
 
     @Id
     @Column(name = "uid")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
     /**

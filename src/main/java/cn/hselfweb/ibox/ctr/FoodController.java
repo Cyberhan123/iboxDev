@@ -35,16 +35,14 @@ public class FoodController {
 
     private final IceBoxRepository iceBoxRepository;
 
-    private final ValidationRepository validationRepository;
 
     @Autowired
-    public FoodController(FoodRepository foodRepository, RecordRepository recordRepository, OfficialCardRepository officialCardRepository, UnOfficialCardRepository unOfficialCardRepository, IceBoxRepository iceBoxRepository,ValidationRepository validationRepository) {
+    public FoodController(FoodRepository foodRepository, RecordRepository recordRepository, OfficialCardRepository officialCardRepository, UnOfficialCardRepository unOfficialCardRepository, IceBoxRepository iceBoxRepository) {
         this.foodRepository = foodRepository;
         this.officialCardRepository = officialCardRepository;
         this.recordRepository = recordRepository;
         this.unOfficialCardRepository = unOfficialCardRepository;
         this.iceBoxRepository = iceBoxRepository;
-        this.validationRepository = validationRepository;
     }
 
     private static List<Record> removeDuplicateOrder(List<Record> orderList) {

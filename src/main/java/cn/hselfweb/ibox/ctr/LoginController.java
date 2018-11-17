@@ -11,12 +11,12 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RepositoryRestController
 public class LoginController {
@@ -31,36 +31,37 @@ public class LoginController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(value = "/login/{tel}{password}", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> login(@PathVariable("tel") String tel,
+    @RequestMapping(value = "validations/login/{tel}/{password}", method = RequestMethod.GET)
+    public @ResponseBody Map<String, Object> login(@PathVariable("tel") String tel,
                                      @PathVariable("password") String password,
-                                     HttpSession session0,
-                                     HttpServletRequest request) {
-        System.out.println(session0);
-        System.out.println(request);
+                                     //HttpSession session0,
+                                     HttpServletResponse response) {
+        System.out.println("已进入登录请求");
         System.out.println("heelo");
         Map<String, Object> map = new HashMap<String, Object>();
-        User user = userRepository.getByTel(tel);
+        List<User> userList = userRepository.getAllByTel(tel);
+        User user = userList.get(0);
         if (user == null) {
             map.put("msg", "用户名不存在");
             return map;
         }
-
         User user0 = userRepository.getByTelAndPassword(tel, password);
         if (user0 == null) {
             map.put("msg", "用户名或密码错误");
             return map;
         }else{
-            HttpSession session = request.getSession();
-            session.setAttribute("user",user0.getUid());
+            //Cookie cookie = new Cookie();
+            //cookie.setValue("user");
+            //response.addCookie();
+            //HttpSession session = response.
+            //session.setAttribute("user",user0.getUid());
             map.put("msg","登录成功");
         }
         return map;
     }
 
 
-    @RequestMapping(value = "validations/getiden/{tel}", method = RequestMethod.GET)
+    @RequestMapping(value = "/validation/getiden/{tel}", method = RequestMethod.GET)
     public @ResponseBody Map<String, String> getMessage(@PathVariable("tel") String tel){
         System.out.println("已进入验证码发送请求");
         Map<String,String> respon = new HashMap<>();
@@ -104,12 +105,37 @@ public class LoginController {
     }
 
 
-    @RequestMapping(value = "/register/{tel}{password}{iden}{message}", method = RequestMethod.GET)
+    @RequestMapping(value = "/validations/register/{tel}/{password}/{iden}/{message}/{username}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> register(String tel, String password, String message, HttpServletRequest request) {
+    public Map<String, Object> register(
+            @PathVariable("tel") String tel,
+            @PathVariable("password") String password,
+            @PathVariable("iden") String iden,
+            @PathVariable("iden") String message,
+            @PathVariable("username") String username) {
 
+        System.out.println("已经进入注册请求");
         Map<String, Object> map = new HashMap<String, Object>();
-
+        System.out.println("电话号码"+tel);
+        List<Validation> validationList = validationRepository.findAllByTelOrderByDuedateDesc(tel);
+        Validation valiInfo = validationList.get(0);
+        if(valiInfo.getIdentity().equals(iden)){
+            Date dueDate = validationList.get(0).getDuedate();
+            Date now = new Date();
+            if(now.compareTo(dueDate) <= 0){
+                User user = new User();
+                user.setInfo(message);
+                user.setTel(tel);
+                user.setUserName(username);
+                user.setPassword(password);
+                userRepository.save(user);
+                map.put("msg","注册成功");
+            }else{
+                map.put("msg","验证码已过期");
+            }
+        }else{
+            map.put("msg","验证码不正确");
+        }
         return map;
     }
 

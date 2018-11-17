@@ -52,6 +52,9 @@ public class User {
 
     @Column(name = "fid")
     private Long fid;
+
+    private String[] roles;
+
     public void setPassword(String password) {
         this.password = PASSWORD_ENCODER.encode(password);
     }

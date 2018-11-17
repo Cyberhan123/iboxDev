@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,19 +75,25 @@ public class LoginController {
         paramMap.put("TemplateParam",jsonContent);
         paramMap.put("jsonContent", jsonContent);
         try{
-            //SendSmsResponse sendSmsResponse = AliyunMessageUtil.sendSms(paramMap);
-            //System.out.println("状态码是： " + sendSmsResponse.getCode());
-            //if(sendSmsResponse.getCode().equals("OK")){
+            SendSmsResponse sendSmsResponse = AliyunMessageUtil.sendSms(paramMap);
+            System.out.println("状态码是： " + sendSmsResponse.getCode());
+            if(sendSmsResponse.getCode().equals("OK")){
                 System.out.println("状态码ok");
                 Date now = new Date();
+
                 Date dueDate = new Date(now.getTime()+ 300000);
                 Validation validation = new Validation();
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                System.out.println("过期时间");
+                String dd = sdf.format(dueDate);
+                System.out.println(dd);
+
                 validation.setIdentity(randomNum);
                 validation.setTel(tel);
-                validation.setDuedate(now);
+                validation.setDuedate(dueDate);
                 validationRepository.save(validation);
                 respon.put("msg","succeed");
-            //}
+            }
         }catch(Exception e){
             e.printStackTrace();
             respon.put("msg","failed");

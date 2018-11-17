@@ -2,6 +2,8 @@ package cn.hselfweb.ibox.ctr;
 
 import cn.hselfweb.ibox.bean.FoodInfo;
 import cn.hselfweb.ibox.db.*;
+import cn.hselfweb.ibox.utils.AliyunMessageUtil;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Resources;
@@ -33,13 +35,16 @@ public class FoodController {
 
     private final IceBoxRepository iceBoxRepository;
 
+    private final ValidationRepository validationRepository;
+
     @Autowired
-    public FoodController(FoodRepository foodRepository, RecordRepository recordRepository, OfficialCardRepository officialCardRepository, UnOfficialCardRepository unOfficialCardRepository, IceBoxRepository iceBoxRepository) {
+    public FoodController(FoodRepository foodRepository, RecordRepository recordRepository, OfficialCardRepository officialCardRepository, UnOfficialCardRepository unOfficialCardRepository, IceBoxRepository iceBoxRepository,ValidationRepository validationRepository) {
         this.foodRepository = foodRepository;
         this.officialCardRepository = officialCardRepository;
         this.recordRepository = recordRepository;
         this.unOfficialCardRepository = unOfficialCardRepository;
         this.iceBoxRepository = iceBoxRepository;
+        this.validationRepository = validationRepository;
     }
 
     private static List<Record> removeDuplicateOrder(List<Record> orderList) {
@@ -208,4 +213,5 @@ public class FoodController {
             return ResponseEntity.ok(resources);
         }
     }
+
 }

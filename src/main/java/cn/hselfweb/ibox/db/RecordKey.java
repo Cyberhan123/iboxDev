@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class RecordKey implements Serializable {
-    private Long uuid;
+    private String uuid;
     private String iceId;
     private Long fid;
 }

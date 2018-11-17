@@ -4,6 +4,8 @@ import cn.hselfweb.ibox.db.User;
 import cn.hselfweb.ibox.db.UserRepository;
 import cn.hselfweb.ibox.db.Validation;
 import cn.hselfweb.ibox.db.ValidationRepository;
+import cn.hselfweb.ibox.utils.AliyunMessageUtil;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpHeaders;
@@ -14,10 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RepositoryRestController
 public class LoginController {
@@ -42,11 +41,11 @@ public class LoginController {
         System.out.println(request);
         System.out.println("heelo");
         Map<String, Object> map = new HashMap<String, Object>();
-        User user = userRepository.getByTel(tel);
+        /*User user = userRepository.getByTel(tel);
         if (user == null) {
             map.put("msg", "用户名不存在");
             return map;
-        }
+        }*/
 
         User user0 = userRepository.getByTelAndPassword(tel, password);
         if (user0 == null) {
@@ -76,9 +75,9 @@ public class LoginController {
         paramMap.put("TemplateParam", jsonContent);
         paramMap.put("jsonContent", jsonContent);
         try {
-            //SendSmsResponse sendSmsResponse = AliyunMessageUtil.sendSms(paramMap);
-            //System.out.println("状态码是： " + sendSmsResponse.getCode());
-            //if(sendSmsResponse.getCode().equals("OK")){
+            SendSmsResponse sendSmsResponse = AliyunMessageUtil.sendSms(paramMap);
+            System.out.println("状态码是： " + sendSmsResponse.getCode());
+            if(sendSmsResponse.getCode().equals("OK")){
             System.out.println("状态码ok");
             Date now = new Date();
             Date dueDate = new Date(now.getTime() + 300000);
@@ -88,7 +87,7 @@ public class LoginController {
             validation.setDuedate(now);
             validationRepository.save(validation);
             respon.put("msg", "succeed");
-            //}
+            }
         } catch (Exception e) {
             e.printStackTrace();
             respon.put("msg", "failed");
@@ -106,12 +105,34 @@ public class LoginController {
     }
 
 
-    @RequestMapping(value = "/register/{tel}{password}{iden}{message}", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> register(String tel, String password, String message, HttpServletRequest request) {
+    @RequestMapping(value = "/validations/register/{tel}/{password}/{iden}/{message}/{username}", method = RequestMethod.GET)
+    public @ResponseBody Map<String, Object> register(
+            @PathVariable("tel") String tel,
+            @PathVariable("password") String password,
+            @PathVariable("iden") String iden,
+            @PathVariable("message") String message,
+            @PathVariable("username") String username) {
 
         Map<String, Object> map = new HashMap<String, Object>();
-
+        List<Validation> validationList = validationRepository.findAllByTelOrderByDuedateDesc(tel);
+        Validation validation =  validationList.get(0);
+        if(validation.getIdentity().equals(iden)){
+            Date date = new Date();
+            Date duedate = validation.getDuedate();
+            if(date.compareTo(duedate) < 0){
+                User user = new User();
+                user.setPassword(password);
+                user.setUserName(username);
+                user.setInfo(message);
+                user.setTel(tel);
+                userRepository.save(user);
+                map.put("msg","注册成功");
+            }else{
+                map.put("msg","验证码已失效");
+            }
+        }else{
+            map.put("msg","验证码不正确");
+        }
         return map;
     }
 

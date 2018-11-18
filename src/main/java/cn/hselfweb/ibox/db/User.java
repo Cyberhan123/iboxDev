@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -22,7 +22,6 @@ public class User {
      * <p>
      * 自定义setPassword()确保密码永远不会以明文形式存储。
      */
-    public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     @Id
     @Column(name = "uid")
@@ -34,7 +33,7 @@ public class User {
      * @JsonIgnore 应用于密码字段保护json序列化该字段。
      */
     @Column(name = "password")
-    private @JsonIgnore String password;
+    private /*@JsonIgnore*/ String password;
 
     @Column(name = "user_name")
     private String userName;
@@ -56,7 +55,7 @@ public class User {
 
     //private String[] roles;
 
-    public void setPassword(String password) {
+    /*public void setPassword(String password) {
         this.password = PASSWORD_ENCODER.encode(password);
-    }
+    }*/
 }

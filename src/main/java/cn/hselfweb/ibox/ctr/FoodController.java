@@ -8,17 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-@RepositoryRestController
+@RestController
 public class FoodController {
 
 
@@ -61,6 +58,7 @@ public class FoodController {
     public @ResponseBody
     ResponseEntity<?> getAllFoodlist(@PathVariable("macip") String macip) {
 
+        System.out.println("已进入获取食物列表");
         List<FoodInfo> foodInfoList = new ArrayList<>();
         List<Record> recordList = recordRepository.findAllByIceId(macip);
         for (Record data : recordList) {

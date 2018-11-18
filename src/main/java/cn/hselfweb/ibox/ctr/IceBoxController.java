@@ -6,12 +6,9 @@ import cn.hselfweb.ibox.db.IceBoxRepository;
 import cn.hselfweb.ibox.db.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@RepositoryRestController
+@RestController
 public class IceBoxController {
 
     private final IceBoxRepository iceBoxRepository;

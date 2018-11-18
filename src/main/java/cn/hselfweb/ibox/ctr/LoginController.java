@@ -9,16 +9,14 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
-@RepositoryRestController
+@RestController
 public class LoginController {
 
     private final UserRepository userRepository;
@@ -31,21 +29,20 @@ public class LoginController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(value = "/login/{tel}{password}", method = RequestMethod.GET)
+    @RequestMapping(value = "/login/{tel}/{password}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> login(@PathVariable("tel") String tel,
                                      @PathVariable("password") String password,
-                                     HttpSession session0,
+                                     //HttpSession session0,
                                      HttpServletRequest request) {
-        System.out.println(session0);
         System.out.println(request);
         System.out.println("heelo");
         Map<String, Object> map = new HashMap<String, Object>();
-        /*User user = userRepository.getByTel(tel);
+        User user = userRepository.getByTel(tel);
         if (user == null) {
             map.put("msg", "用户名不存在");
             return map;
-        }*/
+        }
 
         User user0 = userRepository.getByTelAndPassword(tel, password);
         if (user0 == null) {

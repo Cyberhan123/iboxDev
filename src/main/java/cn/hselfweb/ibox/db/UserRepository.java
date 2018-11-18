@@ -6,9 +6,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> getAllByFid(Long fid);
+    List<User> findAllByFid(Long fid);
     User save(User user);
-    User getByTelAndPassword(String tel,String password);
-    List<User> getAllByTel(String tel);
-    User getByTel(String tel);
+    User findByTelAndPassword(String tel,String password);
+    User findByTel(String tel);
+    User findByUid(Long uid);
 }

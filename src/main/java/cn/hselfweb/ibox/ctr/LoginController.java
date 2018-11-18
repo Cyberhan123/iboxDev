@@ -38,19 +38,20 @@ public class LoginController {
         System.out.println(request);
         System.out.println("heelo");
         Map<String, Object> map = new HashMap<String, Object>();
-        User user = userRepository.getByTel(tel);
+        User user = userRepository.findByTel(tel);
         if (user == null) {
             map.put("msg", "用户名不存在");
             return map;
         }
 
-        User user0 = userRepository.getByTelAndPassword(tel, password);
+        User user0 = userRepository.findByTelAndPassword(tel, password);
         if (user0 == null) {
             map.put("msg", "用户名或密码错误");
             return map;
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("user", user0.getUid());
+            session.setMaxInactiveInterval(2*24*60*60);
             map.put("msg", "登录成功");
         }
         return map;

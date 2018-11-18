@@ -8,8 +8,12 @@ import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -39,7 +43,7 @@ public class UserController {
         Family family = familyRepository.getOne(fid);
         Long uid = family.getUid();
         System.out.println("管理员uid:" + uid);
-        List<User> users = userRepository.getAllByFid(fid);
+        List<User> users = userRepository.findAllByFid(fid);
         System.out.println(users.get(0).getUid());
         for (int i = 0; i < users.size(); i++) {
             User user = users.get(i);
@@ -60,4 +64,26 @@ public class UserController {
         resources.add(linkTo(methodOn(UserController.class).getIceBoxUserInfo(macip)).withSelfRel());
         return ResponseEntity.ok(resources);
     }
+
+    @RequestMapping(value = "users/putheadurl/{headurl}", method = RequestMethod.GET)
+    public @ResponseBody
+    Map<String,String> saveHeadUrl(
+            @PathVariable("headurl") String headUrl,
+            HttpServletRequest request
+    ){
+        Map<String,String> respon = new HashMap<>();
+        HttpSession session =  request.getSession();
+        Long uid =  (Long)session.getAttribute("user");
+        User user = userRepository.findByUid(uid);
+        user.setHeadUrl(headUrl);
+        User user0 = userRepository.save(user);
+        if(user0.getHeadUrl() == headUrl){
+            respon.put("msg","succeed");
+        }else{
+            respon.put("msg","failed");
+        }
+        return respon;
+    }
+
+
 }

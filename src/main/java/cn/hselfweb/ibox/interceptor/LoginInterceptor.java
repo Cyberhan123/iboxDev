@@ -16,6 +16,9 @@ public class LoginInterceptor implements HandlerInterceptor{
         System.out.println("你已进入拦截器");
 
         HttpSession session = request.getSession();
+        if(request.getSession(false) == null){
+
+        }
         System.out.println("session user" + session.getAttribute("user"));
         if(session.getAttribute("user") != null){
             return true;

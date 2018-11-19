@@ -15,7 +15,8 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         String [] addPathPatterns = {
                 "/users/**",
                 "/foods/**",
-                "/geticeboxinfo/**"
+                "/geticeboxinfo/**",
+                "/iceboxes/**"
         };
 
         //不拦截的路径

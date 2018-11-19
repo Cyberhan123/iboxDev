@@ -1,5 +1,6 @@
 package cn.hselfweb.ibox.db;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +23,11 @@ public class IceBox {
 
     @Column(name = "ice_name")
     private String iceName;
+
+    public IceBox(String iceId,Long fid,String iceName){
+        this.iceId = iceId;
+        this.fid = fid;
+        this.iceName = iceName;
+    }
 
 }

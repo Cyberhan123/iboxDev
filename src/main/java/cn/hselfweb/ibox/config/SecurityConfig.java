@@ -1,6 +1,6 @@
 package cn.hselfweb.ibox.config;
 
-import cn.hselfweb.ibox.db.User;
+/*import cn.hselfweb.ibox.db.User;
 import cn.hselfweb.ibox.service.SpringDataJpaUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -35,4 +35,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll().anyRequest().authenticated()
                 .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
-}
+}*/

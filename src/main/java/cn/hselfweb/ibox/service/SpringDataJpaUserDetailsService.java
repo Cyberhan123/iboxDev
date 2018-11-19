@@ -1,7 +1,7 @@
 package cn.hselfweb.ibox.service;
 
 
-import cn.hselfweb.ibox.db.UserRepository;
+/*import cn.hselfweb.ibox.db.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,4 +22,4 @@ public class SpringDataJpaUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
                 AuthorityUtils.createAuthorityList(user.getRoles()));
     }
-}
+}*/

@@ -9,4 +9,5 @@ public interface IceBoxRepository extends Repository<IceBox,String> {
     IceBox getIceBoxByIceId(String macip);
 
     IceBox save(IceBox iceBox);
+    IceBox deleteByIceId(String iceId);
 }

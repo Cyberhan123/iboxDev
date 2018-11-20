@@ -3,9 +3,6 @@ package cn.hselfweb.ibox.ctr;
 import cn.hselfweb.ibox.bean.IceOrder;
 import cn.hselfweb.ibox.db.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.hateoas.Resources;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 public class UserController {
@@ -33,7 +28,7 @@ public class UserController {
 
     @RequestMapping(value = "users/geticeboxuserinfo/{macip}", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<?> getIceBoxUserInfo(
+    List<IceOrder>  getIceBoxUserInfo(
             @PathVariable("macip") String macip
     ) {
         System.out.println("helloworld");
@@ -60,30 +55,41 @@ public class UserController {
             }
             iceOrders.add(iceOrder);
         }
-        Resources<IceOrder> resources = new Resources<>(iceOrders);
-        resources.add(linkTo(methodOn(UserController.class).getIceBoxUserInfo(macip)).withSelfRel());
-        return ResponseEntity.ok(resources);
+        return iceOrders;
     }
 
     @RequestMapping(value = "users/putheadurl/{headurl}", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String,String> saveHeadUrl(
+    Map<String, String> saveHeadUrl(
             @PathVariable("headurl") String headUrl,
             HttpServletRequest request
-    ){
-        Map<String,String> respon = new HashMap<>();
-        HttpSession session =  request.getSession();
-        Long uid =  (Long)session.getAttribute("user");
+    ) {
+        Map<String, String> respon = new HashMap<>();
+        HttpSession session = request.getSession();
+        Long uid = (Long) session.getAttribute("user");
         User user = userRepository.findByUid(uid);
         user.setHeadUrl(headUrl);
         User user0 = userRepository.save(user);
-        if(user0.getHeadUrl() == headUrl){
-            respon.put("msg","succeed");
-        }else{
-            respon.put("msg","failed");
+        if (user0.getHeadUrl() == headUrl) {
+            respon.put("msg", "succeed");
+        } else {
+            respon.put("msg", "failed");
         }
         return respon;
     }
 
-
+    /**
+     *  获取当前用户信息
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "users/getUserInfo", method = RequestMethod.GET)
+    public @ResponseBody
+    User getUserInfo(
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession();
+        Long uid = (Long) session.getAttribute("user");
+        return userRepository.findByUid(uid);
+    }
 }

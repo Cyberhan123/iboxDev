@@ -11,9 +11,6 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static cn.hselfweb.ibox.ctr.IceBoxController.getRandom;
-
 @RestController
 public class IceBoxController {
 
@@ -62,7 +59,19 @@ public class IceBoxController {
     }
 
     private static String getRandom(){
-
         return "32";
+    }
+
+    /**
+     * 删除冰箱
+     * @param iceId
+     * @return
+     */
+    @RequestMapping(value = "iceboxes/delect/{iceId}", method = RequestMethod.GET)
+    public @ResponseBody
+    IceBox delect(
+            @PathVariable("iceID")String iceId
+    ){
+        return iceBoxRepository.deleteByIceId(iceId);
     }
 }

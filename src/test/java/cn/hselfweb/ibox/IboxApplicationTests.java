@@ -1,4 +1,4 @@
-package cn.hselfweb.ibox.ibox;
+package cn.hselfweb.ibox;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

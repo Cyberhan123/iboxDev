@@ -2,18 +2,10 @@ package cn.hselfweb.ibox.ctr;
 
 import cn.hselfweb.ibox.bean.FoodInfo;
 import cn.hselfweb.ibox.db.*;
-import cn.hselfweb.ibox.utils.AliyunMessageUtil;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.hateoas.Resources;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 public class FoodController {
@@ -43,20 +35,14 @@ public class FoodController {
     }
 
     private static List<Record> removeDuplicateOrder(List<Record> orderList) {
-        Set<Record> set = new TreeSet<Record>(new Comparator<Record>() {
-            @Override
-            public int compare(Record a, Record b) {
-                // 字符串则按照asicc码升序排列
-                return a.getUuid().compareTo(b.getUuid());
-            }
-        });
+        Set<Record> set = new TreeSet<Record>(Comparator.comparing(Record::getUuid));
         set.addAll(orderList);
-        return new ArrayList<Record>(set);
+        return new ArrayList<>(set);
     }
 
     @RequestMapping(value = "/foods/getallfoodlist/{macip}", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<?> getAllFoodlist(@PathVariable("macip") String macip) {
+    List<FoodInfo> getAllFoodlist(@PathVariable("macip") String macip) {
 
         System.out.println("已进入获取食物列表");
         List<FoodInfo> foodInfoList = new ArrayList<>();
@@ -114,15 +100,12 @@ public class FoodController {
                 }
             }
         }
-        Resources<FoodInfo> resources = new Resources<>(foodInfoList);
-        resources.add(linkTo(methodOn(FoodController.class).getAllFoodlist(macip)).withSelfRel());
-        return ResponseEntity.ok(resources);
+        return foodInfoList;
     }
 
     /**
      * food record 双表存入及更新接口
      *
-     * @param vision      接口版本 当前为v1
      * @param macip       就是冰箱的ice_id
      * @param foodName    食物名称
      * @param uuid        官方卡或非官方卡的索引ID
@@ -138,10 +121,9 @@ public class FoodController {
      * @param taretWeight 皮重
      * @return 返回操作成功或者失败
      */
-    @RequestMapping(value = "/foods/putFoodDataIn/{vision}/{macip}/{foodName}/{UUId}/{comment}/{foodTime}/{type}/{opFlag}/{opDate}/{foodphoto}/{foodWeight}/{foodParent}/{foodPercent}/{taretWeight}", method = RequestMethod.GET)
+    @RequestMapping(value = "/foods/putFoodDataIn/{macip}/{foodName}/{UUId}/{comment}/{foodTime}/{type}/{opFlag}/{opDate}/{foodphoto}/{foodWeight}/{foodParent}/{foodPercent}/{taretWeight}", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<?> putFoodData(
-            @PathVariable("vision") String vision,
+    List<String> putFoodData(
             @PathVariable("macip") String macip,
             @PathVariable("foodName") String foodName,
             @PathVariable("UUId") String uuid,
@@ -163,51 +145,42 @@ public class FoodController {
         OfficialCard officialCard = new OfficialCard();
         UnOfficialCard unOfficialCard = new UnOfficialCard();
         Record record = new Record();
-        if (vision.equals("v1")) {
-            food.setFoodId(foodId);
-            food.setFoodName(foodName);
-            food.setComment(comment);
-            food.setFoodTime(foodTime);
-            food.setFoodUrl(foodPhoto);
-            food.setFoodWeight(foodWeight);
-            food.setType(type);
-            food.setPercent(foodPercent);
-            food.setFoodParent(foodParent);
-            if (officialCardRepository.existsByUuid(uuid)) {
-                officialCard.setFoodId(foodId);
-                officialCard.setUuid(uuid);
-                officialCardRepository.save(officialCard);
-                foodRepository.save(food);
-            } else {
-                unOfficialCard.setUuid(uuid);
-                unOfficialCard.setFid(iceBox.getFid());
-                unOfficialCard.setFoodUrl(foodPhoto);
-                unOfficialCard.setType(type);
-                unOfficialCard.setFoodTime(foodTime);
-                unOfficialCard.setFoodName(foodName);
-                unOfficialCard.setFoodWeight(foodWeight);
-                unOfficialCard.setPercent(foodPercent);
-                unOfficialCardRepository.save(unOfficialCard);
-            }
-            record.setUuid(uuid);
-            record.setIceId(macip);
-            record.setFid(iceBox.getFid());
-            record.setOpFlag(opFlag);
-            record.setOpDate(opDate);
-            record.setTareWeight(taretWeight);
-            record.setFoodWeight(foodWeight);
-            record.setFoodPhoto(foodPhoto);
-            recordRepository.save(record);
-            message.add("success");
-            Resources<String> resources = new Resources<>(message);
-            resources.add(linkTo(methodOn(FoodController.class).putFoodData(vision, macip, foodName, uuid, comment, foodTime, type, opFlag, opDate, foodParent, foodPhoto, foodWeight, foodPercent, taretWeight)).withSelfRel());
-            return ResponseEntity.ok(resources);
+        food.setFoodId(foodId);
+        food.setFoodName(foodName);
+        food.setComment(comment);
+        food.setFoodTime(foodTime);
+        food.setFoodUrl(foodPhoto);
+        food.setFoodWeight(foodWeight);
+        food.setType(type);
+        food.setPercent(foodPercent);
+        food.setFoodParent(foodParent);
+        if (officialCardRepository.existsByUuid(uuid)) {
+            officialCard.setFoodId(foodId);
+            officialCard.setUuid(uuid);
+            officialCardRepository.save(officialCard);
+            foodRepository.save(food);
         } else {
-            message.add("please input right version for current api");
-            Resources<String> resources = new Resources<>(message);
-            resources.add(linkTo(methodOn(FoodController.class).putFoodData(vision, macip, foodName, uuid, comment, foodTime, type, opFlag, opDate, foodParent, foodPhoto, foodWeight, foodPercent, taretWeight)).withSelfRel());
-            return ResponseEntity.ok(resources);
+            unOfficialCard.setUuid(uuid);
+            unOfficialCard.setFid(iceBox.getFid());
+            unOfficialCard.setFoodUrl(foodPhoto);
+            unOfficialCard.setType(type);
+            unOfficialCard.setFoodTime(foodTime);
+            unOfficialCard.setFoodName(foodName);
+            unOfficialCard.setFoodWeight(foodWeight);
+            unOfficialCard.setPercent(foodPercent);
+            unOfficialCardRepository.save(unOfficialCard);
         }
+        record.setUuid(uuid);
+        record.setIceId(macip);
+        record.setFid(iceBox.getFid());
+        record.setOpFlag(opFlag);
+        record.setOpDate(opDate);
+        record.setTareWeight(taretWeight);
+        record.setFoodWeight(foodWeight);
+        record.setFoodPhoto(foodPhoto);
+        recordRepository.save(record);
+        message.add("success");
+        return message;
     }
 
 }

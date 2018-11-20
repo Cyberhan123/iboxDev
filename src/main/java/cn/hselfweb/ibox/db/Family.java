@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
+@IdClass(FamilyKey.class)
 @Entity
 @Table(name = "family")
 public class Family {
@@ -15,6 +16,7 @@ public class Family {
     @Column(name = "fid")
     private Long fid;
 
+    @Id
     @Column(name = "uid")
     private Long uid;
 

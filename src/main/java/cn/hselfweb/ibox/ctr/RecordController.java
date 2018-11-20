@@ -3,7 +3,6 @@ package cn.hselfweb.ibox.ctr;
 import cn.hselfweb.ibox.db.Record;
 import cn.hselfweb.ibox.db.RecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,20 +17,13 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class RecordController {
     private final RecordRepository recordRepository;
 
-    //   private final UnOfficialCardRepository unOfficialCardRepository;
-
-//    private final FoodRepository foodRepository;
-
     @Autowired
     public RecordController(RecordRepository recordRepository) {
         this.recordRepository = recordRepository;
-        //      this.unOfficialCardRepository = unOfficialCardRepository;
-//        this.foodRepository = foodRepository;
     }
 
     /**
      * 取出操作
-     *
      * @param version 当前接口版本
      * @param iceId   冰箱的id 就是macip
      * @param uuid    uuid 就是卡牌id

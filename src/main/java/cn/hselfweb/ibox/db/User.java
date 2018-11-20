@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@ToString(exclude = "password")
+//@ToString(exclude = "password")
 @Table(name = "user")
 public class User {
     /**

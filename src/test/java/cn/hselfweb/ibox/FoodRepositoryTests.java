@@ -1,4 +1,4 @@
-package cn.hselfweb.ibox.ibox;
+package cn.hselfweb.ibox;
 
 import cn.hselfweb.ibox.db.Food;
 import cn.hselfweb.ibox.db.FoodRepository;

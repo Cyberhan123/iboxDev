@@ -5,7 +5,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-//@RepositoryRestResource(exported = false)
+@RepositoryRestResource(exported = false)
 public interface FamilyRepository extends JpaRepository<Family,Long> {
     List<Family> findAllByUid(Long uid);
     Family save(Family family);

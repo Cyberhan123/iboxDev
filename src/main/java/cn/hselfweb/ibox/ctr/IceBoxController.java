@@ -11,6 +11,10 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import static cn.hselfweb.ibox.ctr.IceBoxController.getRandom;
+
 @RestController
 public class IceBoxController {
 
@@ -34,7 +38,7 @@ public class IceBoxController {
         return iceBoxRepository.getIceBoxByIceId(macip);
     }
 
-    @RequestMapping(value = "iceboxes/createbox/{nickname}", method = RequestMethod.GET)
+    @RequestMapping(value = "/iceboxes/createicebox/{nickname}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String,Object> createBox(@PathVariable("nickname") String nickName,
                                         HttpServletRequest request) {
@@ -50,16 +54,30 @@ public class IceBoxController {
             family.setUid(uid);
             Family family1 = familyRepository.save(family);
             fid = family1.getFid();
+            if(fid != null){
+                System.out.println("默认家庭创建成功");
+            }else{
+                respon.put("code",2);
+                respon.put("msg","默认家庭创建失败");
+            }
         }else{
             fid = families.get(0).getFid();
         }
         String iceId = getRandom();
         IceBox iceBox = new IceBox(iceId,fid,nickName);
+        IceBox iceBox0 = iceBoxRepository.save(iceBox);
+        if(iceBox0.getIceId() != null){
+            respon.put("code",1);
+            respon.put("msg","冰箱创建成功");
+        }else{
+            respon.put("msg","冰箱创建失败");
+        }
         return respon;
     }
 
-    private static String getRandom(){
-        return "32";
+    public static String getRandom(){
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().replace("-","");
     }
 
     /**

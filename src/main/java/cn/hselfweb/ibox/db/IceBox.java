@@ -24,6 +24,10 @@ public class IceBox {
     @Column(name = "ice_name")
     private String iceName;
 
+    public IceBox(){
+
+    }
+
     public IceBox(String iceId,Long fid,String iceName){
         this.iceId = iceId;
         this.fid = fid;

@@ -29,10 +29,10 @@ public class LoginController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(value = "/login/{tel}/{password}", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", params={"tel","password"},method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> login(@PathVariable("tel") String tel,
-                                     @PathVariable("password") String password,
+    public Map<String, Object> login(String tel,
+                                     String password,
                                      //HttpSession session0,
                                      HttpServletRequest request) {
         System.out.println(request);
@@ -40,29 +40,32 @@ public class LoginController {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = userRepository.findByTel(tel);
         if (user == null) {
+            map.put("code",2);
             map.put("msg", "用户名不存在");
             return map;
         }
 
         User user0 = userRepository.findByTelAndPassword(tel, password);
         if (user0 == null) {
+            map.put("code",0);
             map.put("msg", "用户名或密码错误");
             return map;
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("user", user0.getUid());
             session.setMaxInactiveInterval(2*24*60*60);
+            map.put("code",1);
             map.put("msg", "登录成功");
         }
         return map;
     }
 
 
-    @RequestMapping(value = "validations/getiden/{tel}", method = RequestMethod.GET)
+    @RequestMapping(value = "validations/getiden",params="tel", method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, String> getMessage(@PathVariable("tel") String tel) {
+    Map<String, Object> getMessage(String tel) {
         System.out.println("已进入验证码发送请求");
-        Map<String, String> respon = new HashMap<>();
+        Map<String, Object> respon = new HashMap<>();
         Map<String, String> paramMap = new HashMap<>();
         String randomNum = createRandomNum(6);
         String jsonContent = "{\"code\":\"" + randomNum + "\"}";
@@ -82,12 +85,14 @@ public class LoginController {
             Validation validation = new Validation();
             validation.setIdentity(randomNum);
             validation.setTel(tel);
-            validation.setDuedate(now);
+            validation.setDuedate(dueDate);
             validationRepository.save(validation);
+            respon.put("code",1);
             respon.put("msg", "succeed");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            respon.put("code",0);
             respon.put("msg", "failed");
         }
         return respon;
@@ -103,32 +108,47 @@ public class LoginController {
     }
 
 
-    @RequestMapping(value = "/validations/register/{tel}/{password}/{iden}/{message}/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/validations/register",params={"tel","password","iden","message","username"}, method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> register(
-            @PathVariable("tel") String tel,
-            @PathVariable("password") String password,
-            @PathVariable("iden") String iden,
-            @PathVariable("message") String message,
-            @PathVariable("username") String username) {
+             String tel,
+             String password,
+             String iden,
+             String message,
+             String username) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         List<Validation> validationList = validationRepository.findAllByTelOrderByDuedateDesc(tel);
+        if(validationList.size() == 0){
+            map.put("code",1);
+            map.put("msg","验证码不正确");
+            return map;
+        }
         Validation validation =  validationList.get(0);
         if(validation.getIdentity().equals(iden)){
             Date date = new Date();
             Date duedate = validation.getDuedate();
-            if(date.compareTo(duedate) < 0){
-                User user = new User();
-                user.setPassword(password);
-                user.setUserName(username);
-                user.setInfo(message);
-                user.setTel(tel);
-                userRepository.save(user);
-                map.put("msg","注册成功");
-            }else{
-                map.put("msg","验证码已失效");
+            User user0 = userRepository.findByTel(tel);
+            if(user0 == null){
+                if(date.compareTo(duedate) < 0){
+                    User user = new User();
+                    user.setPassword(password);
+                    user.setUserName(username);
+                    user.setInfo(message);
+                    user.setTel(tel);
+                    userRepository.save(user);
+                    map.put("code",1);
+                    map.put("msg","注册成功");
+                }else{
+                    map.put("code",2);
+                    map.put("msg","验证码已失效");
+                }
+            }
+            else{
+                map.put("code",3);
+                map.put("msg","手机号已被注册");
             }
         }else{
+            map.put("code",0);
             map.put("msg","验证码不正确");
         }
         return map;

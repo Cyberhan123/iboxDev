@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class IceOrder {
-    private int admin;
+    private Long admin;
     private User user;
 }

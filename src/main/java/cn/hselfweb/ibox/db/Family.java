@@ -23,4 +23,7 @@ public class Family {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "role")
+    private Long role;
+
 }

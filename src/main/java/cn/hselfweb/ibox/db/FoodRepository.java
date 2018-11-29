@@ -8,5 +8,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface FoodRepository extends Repository<Food, Long> {
     Food getAllByFoodId(Long foodId);
 
+
     Food save(Food food);
 }

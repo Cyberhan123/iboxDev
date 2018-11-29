@@ -35,44 +35,40 @@ public class UserController {
         List<IceOrder> iceOrders = new ArrayList<IceOrder>();
         IceBox iceBox = iceBoxRepository.getIceBoxByIceId(macip);
         Long fid = iceBox.getFid();
-        Family family = familyRepository.getOne(fid);
-        Long uid = family.getUid();
-        System.out.println("管理员uid:" + uid);
-        List<User> users = userRepository.findAllByFid(fid);
-        System.out.println(users.get(0).getUid());
-        for (int i = 0; i < users.size(); i++) {
-            User user = users.get(i);
-            user.setPassword("*****");
+        List<Family> families = familyRepository.findAllByFid(fid);
+        for(int i = 0; i < families.size(); i++){
+            Family family = families.get(i);
+            Long uid = family.getUid();
+            Long admin = family.getRole();
+            User user = userRepository.findByUid(uid);
             IceOrder iceOrder = new IceOrder();
             iceOrder.setUser(user);
-            System.out.println(user.getUid());
-            if (user.getUid().equals(uid)) {
-                iceOrder.setAdmin(0);
-                System.out.println("***");
-            } else {
-                System.out.println("...");
-                iceOrder.setAdmin(1);
-            }
+            iceOrder.setAdmin(admin);
             iceOrders.add(iceOrder);
         }
         return iceOrders;
     }
 
-    @RequestMapping(value = "users/putheadurl/{headurl}", method = RequestMethod.GET)
+
+
+    @RequestMapping(value = "users/putheadurl",params={"headUrl"}, method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, String> saveHeadUrl(
-            @PathVariable("headurl") String headUrl,
+    Map<String, Object> saveHeadUrl(
+            String headUrl,
             HttpServletRequest request
     ) {
-        Map<String, String> respon = new HashMap<>();
+        System.out.println(headUrl);
+        Map<String,Object> respon = new HashMap<>();
         HttpSession session = request.getSession();
         Long uid = (Long) session.getAttribute("user");
         User user = userRepository.findByUid(uid);
         user.setHeadUrl(headUrl);
         User user0 = userRepository.save(user);
         if (user0.getHeadUrl() == headUrl) {
+            respon.put("code",1);
             respon.put("msg", "succeed");
         } else {
+            respon.put("code",0);
             respon.put("msg", "failed");
         }
         return respon;

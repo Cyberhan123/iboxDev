@@ -47,11 +47,6 @@ public class User {
     @Column(name = "head_url")
     private String headUrl;
 
-    @Column(name = "fid")
-    private Long fid;
-
-    @Column(name = "role")
-    private String role;
 
     //private String[] roles;
 

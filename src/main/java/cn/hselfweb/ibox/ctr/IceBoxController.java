@@ -38,30 +38,29 @@ public class IceBoxController {
         return iceBoxRepository.getIceBoxByIceId(macip);
     }
 
-    @RequestMapping(value = "/iceboxes/createicebox/{nickname}", method = RequestMethod.GET)
+    @RequestMapping(value = "/iceboxes/createicebox/{nickname}/{fid}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String,Object> createBox(@PathVariable("nickname") String nickName,
+                                        @PathVariable("fid") Long fid,
                                         HttpServletRequest request) {
         Map<String,Object> respon = new HashMap<>();
         HttpSession session = request.getSession();
         Long uid = (Long)session.getAttribute("user");
         User user = userRepository.findByUid(uid);
-        List<Family> families = familyRepository.findAllByUid(uid);
-        Family family = new Family();
-        Long fid;
-        if(families.size() == 0){
+        if(fid == null){
+            Family family = new Family();
             family.setName(user.getUserName()+"的家庭");
             family.setUid(uid);
+            family.setRole(1L);
             Family family1 = familyRepository.save(family);
             fid = family1.getFid();
             if(fid != null){
+                respon.put("fid",fid);
                 System.out.println("默认家庭创建成功");
             }else{
                 respon.put("code",2);
                 respon.put("msg","默认家庭创建失败");
             }
-        }else{
-            fid = families.get(0).getFid();
         }
         String iceId = getRandom();
         IceBox iceBox = new IceBox(iceId,fid,nickName);
@@ -70,6 +69,7 @@ public class IceBoxController {
             respon.put("code",1);
             respon.put("msg","冰箱创建成功");
         }else{
+            respon.put("code",0);
             respon.put("msg","冰箱创建失败");
         }
         return respon;

@@ -26,6 +26,11 @@ public class UserController {
         this.familyRepository = familyRepository;
     }
 
+    /**
+     * 获取冰箱订阅者信息
+     * @param macip
+     * @return 订阅者信息列表
+     */
     @RequestMapping(value = "users/geticeboxuserinfo/{macip}", method = RequestMethod.GET)
     public @ResponseBody
     List<IceOrder>  getIceBoxUserInfo(
@@ -50,7 +55,12 @@ public class UserController {
     }
 
 
-
+    /**
+     * 上传用户头像
+     * @param headUrl
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "users/putheadurl",params={"headUrl"}, method = RequestMethod.POST)
     public @ResponseBody
     Map<String, Object> saveHeadUrl(

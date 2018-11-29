@@ -29,9 +29,15 @@ public class FamilyController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(value = "/iceboxes/createfamily/{familyname}", method = RequestMethod.GET)
+    /**
+     *创建家庭
+     * @param familyName
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/families/createfamily/{familyname}", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> saveHeadUrl(
+    Map<String, Object> creatFamily(
             @PathVariable("familyname") String familyName,
             HttpServletRequest request
     ) {
@@ -43,8 +49,10 @@ public class FamilyController {
         if (families.size() == 0) {
             family.setName(familyName);
             family.setUid(uid);
+            family.setRole(1L);
             Family family1 = familyRepository.save(family);
             if (family1.getFid() != null) {
+                respon.put("fid",family.getFid());
                 respon.put("code", 1);
                 respon.put("msg", "家庭创建成功");
             } else {
@@ -55,7 +63,6 @@ public class FamilyController {
             respon.put("code", 2);
             respon.put("msg", "你已经创建过家庭了");
         }
-
         return respon;
     }
 

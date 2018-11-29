@@ -60,7 +60,11 @@ public class LoginController {
         return map;
     }
 
-
+    /**
+     * 发送验证码请求
+     * @param tel
+     * @return
+     */
     @RequestMapping(value = "validations/getiden",params="tel", method = RequestMethod.POST)
     public @ResponseBody
     Map<String, Object> getMessage(String tel) {

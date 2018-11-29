@@ -40,6 +40,11 @@ public class FoodController {
         return new ArrayList<>(set);
     }
 
+    /**
+     * 获取冰箱食物列表信息
+     * @param macip
+     * @return
+     */
     @RequestMapping(value = "/foods/getallfoodlist/{macip}", method = RequestMethod.GET)
     public @ResponseBody
     List<FoodInfo> getAllFoodlist(@PathVariable("macip") String macip) {

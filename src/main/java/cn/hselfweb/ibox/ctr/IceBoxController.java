@@ -32,6 +32,11 @@ public class IceBoxController {
         this.familyRepository = familyRepository;
     }
 
+    /**
+     * 获取冰箱信息
+     * @param macip 冰箱唯一标识
+     * @return IceBox
+     */
     @RequestMapping(value = "/geticeboxinfo/{macip}", method = RequestMethod.GET)
     @ResponseBody
     public IceBox query(@PathVariable("macip") String macip) {
@@ -82,7 +87,7 @@ public class IceBoxController {
 
     /**
      * 删除冰箱
-     * @param iceId
+     * @param iceId 冰箱参数
      * @return
      */
     @RequestMapping(value = "iceboxes/delect/{iceId}", method = RequestMethod.GET)

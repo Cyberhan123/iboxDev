@@ -31,9 +31,9 @@ public class FamilyController {
 
     /**
      *创建家庭
-     * @param familyName
-     * @param request
-     * @return
+     * @param familyName  家庭名称
+     * @param request 带有用户信息的cookie
+     * @return {code:0/1/2 msg:失败/成功/已创建}
      */
     @RequestMapping(value = "/families/createfamily/{familyname}", method = RequestMethod.GET)
     public @ResponseBody
@@ -69,7 +69,7 @@ public class FamilyController {
     /**
      * 获取当前用户所在家庭数据
      * @param request uidSession
-     * @return List<Family> Family Object
+     * @return List Family
      */
     @RequestMapping(value = "families/getFamilyInfo", method = RequestMethod.GET)
     public @ResponseBody
@@ -84,7 +84,7 @@ public class FamilyController {
     /**
      * 获取当前用户在哪些家庭中
      * @param request uidSession
-     * @return List<Family>
+     * @return List Family
      */
     @RequestMapping(value = "families", method = RequestMethod.GET)
     public @ResponseBody

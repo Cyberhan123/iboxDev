@@ -42,8 +42,8 @@ public class FoodController {
 
     /**
      * 获取冰箱食物列表信息
-     * @param macip
-     * @return
+     * @param macip 冰箱唯一标识
+     * @return 食物信息列表
      */
     @RequestMapping(value = "/foods/getallfoodlist/{macip}", method = RequestMethod.GET)
     public @ResponseBody

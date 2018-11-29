@@ -28,7 +28,7 @@ public class UserController {
 
     /**
      * 获取冰箱订阅者信息
-     * @param macip
+     * @param macip 冰箱唯一标识
      * @return 订阅者信息列表
      */
     @RequestMapping(value = "users/geticeboxuserinfo/{macip}", method = RequestMethod.GET)
@@ -57,9 +57,9 @@ public class UserController {
 
     /**
      * 上传用户头像
-     * @param headUrl
-     * @param request
-     * @return
+     * @param headUrl 用户头像url
+     * @param request 带有用户信息的request对象
+     * @return {code:0/1,msg:failed/succeed}
      */
     @RequestMapping(value = "users/putheadurl",params={"headUrl"}, method = RequestMethod.POST)
     public @ResponseBody
@@ -86,8 +86,8 @@ public class UserController {
 
     /**
      *  获取当前用户信息
-     * @param request
-     * @return
+     * @param request 带有用户信息的request对象
+     * @return 用户信息
      */
     @RequestMapping(value = "users/getUserInfo", method = RequestMethod.GET)
     public @ResponseBody

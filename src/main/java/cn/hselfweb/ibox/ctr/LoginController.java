@@ -29,6 +29,13 @@ public class LoginController {
         this.userRepository = userRepository;
     }
 
+    /**
+     *登录接口
+     * @param tel 电话号码
+     * @param password 密码
+     * @param request 带有用户表示的cookie信息
+     * @return {code:0/1/2,msg:用户名或密码错误/登录成功/用户名不存在}
+     */
     @RequestMapping(value = "/login", params={"tel","password"},method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> login(String tel,
@@ -62,8 +69,8 @@ public class LoginController {
 
     /**
      * 发送验证码请求
-     * @param tel
-     * @return
+     * @param tel 电话号码
+     * @return {code:0/1,msg:succeed/failed}
      */
     @RequestMapping(value = "validations/getiden",params="tel", method = RequestMethod.POST)
     public @ResponseBody
@@ -112,6 +119,15 @@ public class LoginController {
     }
 
 
+    /**
+     * 注册请求
+     * @param tel 电话号码
+     * @param password 密码
+     * @param iden 验证码
+     * @param message 用户信息
+     * @param username 用户名
+     * @return {code:0/1/2/3,msg:验证码不正确/注册成功/验证码失效/手机号已被注册}
+     */
     @RequestMapping(value = "/validations/register",params={"tel","password","iden","message","username"}, method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> register(
              String tel,
@@ -123,7 +139,7 @@ public class LoginController {
         Map<String, Object> map = new HashMap<String, Object>();
         List<Validation> validationList = validationRepository.findAllByTelOrderByDuedateDesc(tel);
         if(validationList.size() == 0){
-            map.put("code",1);
+            map.put("code",0);
             map.put("msg","验证码不正确");
             return map;
         }

@@ -43,10 +43,17 @@ public class IceBoxController {
         return iceBoxRepository.getIceBoxByIceId(macip);
     }
 
-    @RequestMapping(value = "/iceboxes/createicebox/{nickname}/{fid}", method = RequestMethod.GET)
+    /**
+     * 创建冰箱
+     * @param nickName 冰箱昵称
+     * @param fid 家庭 如没有家庭创建默认家庭时此参数不用提供
+     * @param request userSession
+     * @return {code:0/1/2,msg:../../..}
+     */
+    @RequestMapping(value = "/iceboxes/createicebox", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> createBox(@PathVariable("nickname") String nickName,
-                                        @PathVariable("fid") Long fid,
+    public Map<String,Object> createBox(String nickName,
+                                        Long fid,
                                         HttpServletRequest request) {
         Map<String,Object> respon = new HashMap<>();
         HttpSession session = request.getSession();

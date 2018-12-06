@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static cn.hselfweb.ibox.ctr.IceBoxController.getRandom;
 
@@ -92,6 +89,8 @@ public class IceBoxController {
         return uuid.toString().replace("-","");
     }
 
+
+
     /**
      * 删除冰箱
      * @param iceId 冰箱参数
@@ -103,5 +102,44 @@ public class IceBoxController {
             @PathVariable("iceID")String iceId
     ){
         return iceBoxRepository.deleteByIceId(iceId);
+    }
+
+
+    /**
+     * 获取我的所有冰箱id
+     * @param request 请求session
+     * @return {code:0/1,msg:成功/没有冰箱,iceId:仅成功时返回}
+     */
+    @RequestMapping(value = "iceboxes/getmyiceboxid", method = RequestMethod.GET)
+    public @ResponseBody
+    Map<String,Object> getBoxId(HttpServletRequest request){
+        ArrayList<String> list = new ArrayList<String>();
+        Map<String,Object> respon = new HashMap<>();
+        HttpSession session = request.getSession();
+        Long uid = (Long) session.getAttribute("user");
+        System.out.println(uid);
+        List<Family> families = familyRepository.findAllByUid(uid);
+        int length = families.size();
+        System.out.println("length长度"+length);
+        if(length > 0){
+            for(int i = 0; i < length; i++){
+                Long fid = families.get(i).getFid();
+                System.out.println(("fid为" + fid));
+                List<IceBox> iceBoxes = iceBoxRepository.getAllByFid(fid);
+                for(int j = 0; j < iceBoxes.size(); j++){
+                    IceBox iceBox = iceBoxes.get(i);
+                    String iceId = iceBox.getIceId();
+                    list.add(iceId);
+                }
+            }
+            respon.put("code",1);
+            respon.put("iceId",list);
+            respon.put("msg","获取冰箱Id成功");
+        }
+        else{
+            respon.put("code",0);
+            respon.put("msg","还没有冰箱");
+        }
+        return respon;
     }
 }

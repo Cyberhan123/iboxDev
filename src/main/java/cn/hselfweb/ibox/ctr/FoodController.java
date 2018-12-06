@@ -47,8 +47,9 @@ public class FoodController {
      */
     @RequestMapping(value = "/foods/getallfoodlist/{macip}", method = RequestMethod.GET)
     public @ResponseBody
-    List<FoodInfo> getAllFoodlist(@PathVariable("macip") String macip) {
+    Map<String,Object> getAllFoodlist(@PathVariable("macip") String macip) {
 
+        HashMap<String,Object> map = new HashMap<>();
         System.out.println("已进入获取食物列表");
         List<FoodInfo> foodInfoList = new ArrayList<>();
         List<Record> recordList = recordRepository.findAllByIceId(macip);
@@ -93,7 +94,7 @@ public class FoodController {
                     foodInfo.setFoodName(food.getFoodName());//食材二级分类
                     foodInfo.setFoodUrl(food.getFoodUrl());//二级分类图标
                     Long day = food.getFoodTime();//用于计算保质期
-                    foodInfo.setComment(food.getComment());//食材描述
+                    //foodInfo.setComment(food.getComment());//食材描述
                     foodInfo.setType(food.getType());//存储方式
                     foodInfo.setTime(food.getFoodTime());
                     foodInfo.setPercent((food.getPercent()));
@@ -105,7 +106,15 @@ public class FoodController {
                 }
             }
         }
-        return foodInfoList;
+        if(foodInfoList == null){
+            map.put("code",0);
+            map.put("msg","冰箱没有食材");
+        }else{
+            map.put("code",1);
+            map.put("msg","食材获取成功");
+        }
+        map.put("data",foodInfoList);
+        return map;
     }
 
     /**

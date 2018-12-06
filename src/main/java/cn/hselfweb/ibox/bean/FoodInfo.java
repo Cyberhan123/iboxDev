@@ -10,7 +10,7 @@ public class FoodInfo {
     private String foodName;
     private String foodUrl;
     private String foodPhotoUrl;
-    private String comment;
+    //private String comment;
     private Long weight;
     private Date startTime;//存入日期
     private Long time;//存储时间

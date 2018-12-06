@@ -56,11 +56,19 @@ public class IceBoxController {
         HttpSession session = request.getSession();
         Long uid = (Long)session.getAttribute("user");
         User user = userRepository.findByUid(uid);
+        List<Family> aa = familyRepository.findAllByOrderByFidDesc();
+        Long fid0;
+        if(aa.size() > 0){
+            fid0 = aa.get(0).getFid() + 1;
+        }else{
+            fid0 = 0L;
+        }
         if(fid == null){
             Family family = new Family();
             family.setName(user.getUserName()+"的家庭");
             family.setUid(uid);
             family.setRole(1L);
+            family.setFid(fid0);
             Family family1 = familyRepository.save(family);
             fid = family1.getFid();
             if(fid != null){

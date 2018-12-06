@@ -45,11 +45,19 @@ public class FamilyController {
         HttpSession session = request.getSession();
         Long uid = (Long) session.getAttribute("user");
         List<Family> families = familyRepository.findAllByUid(uid);
+        List<Family> aa = familyRepository.findAllByOrderByFidDesc();
+        Long fid;
+        if(aa.size() > 0){
+            fid = aa.get(0).getFid() + 1;
+        }else{
+            fid = 0L;
+        }
         Family family = new Family();
         if (families.size() == 0) {
             family.setName(familyName);
             family.setUid(uid);
             family.setRole(1L);
+            family.setFid(fid);
             Family family1 = familyRepository.save(family);
             if (family1.getFid() != null) {
                 respon.put("fid",family.getFid());

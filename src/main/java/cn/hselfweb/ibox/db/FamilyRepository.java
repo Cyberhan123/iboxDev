@@ -12,4 +12,5 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
     Family save(Family family);
     Family deleteByFidAndUid(Long fid, Long uid);
     Family findByFidAndUid(Long fid, Long uid);
+    List<Family> findAllByOrderByFidDesc();
 }

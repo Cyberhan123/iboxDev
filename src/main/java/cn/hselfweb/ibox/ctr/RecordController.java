@@ -12,7 +12,11 @@ import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
+/**
+ * @author Cyberhan
+ *
+ * @version v1
+ */
 @RestController
 public class RecordController {
     private final RecordRepository recordRepository;
@@ -29,7 +33,7 @@ public class RecordController {
      * @param uuid    uuid 就是卡牌id
      * @return 是否正确取出
      */
-    @RequestMapping(value = "records/putfooddataout/{version}/{macip}/{uuid}", method = RequestMethod.GET)
+    @RequestMapping(value = "records/putfooddataout/{version}/{macip}/{uuid}", method = RequestMethod.POST)
     public @ResponseBody
     ResponseEntity<?> putFoodDataOut(
             @PathVariable("version") String version,

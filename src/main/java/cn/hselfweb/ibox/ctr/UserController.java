@@ -89,7 +89,7 @@ public class UserController {
      * @param request 带有用户信息的request对象
      * @return 用户信息
      */
-    @RequestMapping(value = "users/getUserInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "users/getUserInfo", method = RequestMethod.POST)
     public @ResponseBody
     User getUserInfo(
             HttpServletRequest request

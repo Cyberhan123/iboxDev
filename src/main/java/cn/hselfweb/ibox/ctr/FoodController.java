@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+/**
+ * 食物管理
+ */
 @RestController
 public class FoodController {
 
@@ -45,7 +48,7 @@ public class FoodController {
      * @param macip 冰箱唯一标识
      * @return 食物信息列表
      */
-    @RequestMapping(value = "/foods/getallfoodlist/{macip}", method = RequestMethod.GET)
+    @RequestMapping(value = "/foods/getallfoodlist/{macip}", method = RequestMethod.POST)
     public @ResponseBody
     Map<String,Object> getAllFoodlist(@PathVariable("macip") String macip) {
 
@@ -135,7 +138,7 @@ public class FoodController {
      * @param taretWeight 皮重
      * @return 返回操作成功或者失败
      */
-    @RequestMapping(value = "/foods/putFoodDataIn/{macip}/{foodName}/{UUId}/{comment}/{foodTime}/{type}/{opFlag}/{opDate}/{foodphoto}/{foodWeight}/{foodParent}/{foodPercent}/{taretWeight}", method = RequestMethod.GET)
+    @RequestMapping(value = "/foods/putFoodDataIn/{macip}/{foodName}/{UUId}/{comment}/{foodTime}/{type}/{opFlag}/{opDate}/{foodphoto}/{foodWeight}/{foodParent}/{foodPercent}/{taretWeight}", method = RequestMethod.POST)
     public @ResponseBody
     List<String> putFoodData(
             @PathVariable("macip") String macip,

@@ -119,6 +119,15 @@ public class LoginController {
         return randomNumStr;
     }
 
+    /**
+     * 短信接口
+     * @param tel
+     * @param password
+     * @param iden
+     * @param message
+     * @param username
+     * @return
+     */
 
     /**
      * 注册请求
@@ -185,6 +194,11 @@ public class LoginController {
         return "succsess";
     }
 
+    /**
+     * token接口
+     * @param session 用户的session
+     * @return 返回Token
+     */
     @RequestMapping("/token")
     public Map<String, String> token(HttpSession session) {
         return Collections.singletonMap("token", session.getId());

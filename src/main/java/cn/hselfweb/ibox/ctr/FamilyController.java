@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 冰箱管理
+ */
 @RestController
 @RequestMapping
 public class FamilyController {
@@ -35,7 +38,7 @@ public class FamilyController {
      * @param request 带有用户信息的cookie
      * @return {code:0/1/2 msg:失败/成功/已创建}
      */
-    @RequestMapping(value = "/families/createfamily/{familyname}", method = RequestMethod.GET)
+    @RequestMapping(value = "/families/createfamily/{familyname}", method = RequestMethod.POST)
     public @ResponseBody
     Map<String, Object> creatFamily(
             @PathVariable("familyname") String familyName,
@@ -79,9 +82,9 @@ public class FamilyController {
      * @param request uidSession
      * @return List Family
      */
-    @RequestMapping(value = "families/getFamilyInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "families/getFamilyInfo", method = RequestMethod.POST)
     public @ResponseBody
-    List<Family> getUserInfo(
+    List<Family> getFamilyInfo(
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession();
@@ -94,7 +97,7 @@ public class FamilyController {
      * @param request uidSession
      * @return List Family
      */
-    @RequestMapping(value = "families", method = RequestMethod.GET)
+    @RequestMapping(value = "families", method = RequestMethod.POST)
     public @ResponseBody
     List<Family> getFamilies(
             HttpServletRequest request
@@ -111,7 +114,7 @@ public class FamilyController {
      * @return Object Family
      */
 
-    @RequestMapping(value = "families/outFamily/{fid}", method = RequestMethod.GET)
+    @RequestMapping(value = "families/outFamily/{fid}", method = RequestMethod.POST)
     public @ResponseBody
     Family outFamily(
             @PathVariable("fid") Long fid,
@@ -129,7 +132,7 @@ public class FamilyController {
      * @param request uidSession
      * @return Object  Family
      */
-    @RequestMapping(value = "families/invitation/{tel}/{fid}", method = RequestMethod.GET)
+    @RequestMapping(value = "families/invitation/{tel}/{fid}", method = RequestMethod.POST)
     public @ResponseBody
     Family invitation(
             @PathVariable("tel") String tel,

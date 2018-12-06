@@ -11,7 +11,11 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 import static cn.hselfweb.ibox.ctr.IceBoxController.getRandom;
-
+/**
+ * @author Cyberhan
+ *
+ * @version v1
+ */
 @RestController
 public class IceBoxController {
 
@@ -34,7 +38,7 @@ public class IceBoxController {
      * @param macip 冰箱唯一标识
      * @return IceBox
      */
-    @RequestMapping(value = "/geticeboxinfo/{macip}", method = RequestMethod.GET)
+    @RequestMapping(value = "/geticeboxinfo/{macip}", method = RequestMethod.POST)
     @ResponseBody
     public IceBox query(@PathVariable("macip") String macip) {
         return iceBoxRepository.getIceBoxByIceId(macip);
@@ -102,9 +106,9 @@ public class IceBoxController {
     /**
      * 删除冰箱
      * @param iceId 冰箱参数
-     * @return
+     * @return 返回冰箱实体 iceBox
      */
-    @RequestMapping(value = "iceboxes/delect/{iceId}", method = RequestMethod.GET)
+    @RequestMapping(value = "iceboxes/delect/{iceId}", method = RequestMethod.POST)
     public @ResponseBody
     IceBox delect(
             @PathVariable("iceID")String iceId
@@ -118,7 +122,7 @@ public class IceBoxController {
      * @param request 请求session
      * @return {code:0/1,msg:成功/没有冰箱,iceId:仅成功时返回}
      */
-    @RequestMapping(value = "iceboxes/getmyiceboxid", method = RequestMethod.GET)
+    @RequestMapping(value = "iceboxes/getmyiceboxid", method = RequestMethod.POST)
     public @ResponseBody
     Map<String,Object> getBoxId(HttpServletRequest request){
         ArrayList<String> list = new ArrayList<String>();

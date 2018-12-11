@@ -38,7 +38,7 @@ public class FamilyController {
      * @param request 带有用户信息的cookie
      * @return {code:0/1/2 msg:失败/成功/已创建}
      */
-    @RequestMapping(value = "/families/createfamily/{familyname}", method = RequestMethod.POST)
+    @RequestMapping(value = "/families/createfamily/{familyname}", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> creatFamily(
             @PathVariable("familyname") String familyName,
@@ -82,7 +82,7 @@ public class FamilyController {
      * @param request uidSession
      * @return List Family
      */
-    @RequestMapping(value = "families/getFamilyInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "families/getFamilyInfo", method = RequestMethod.GET)
     public @ResponseBody
     List<Family> getFamilyInfo(
             HttpServletRequest request
@@ -97,7 +97,7 @@ public class FamilyController {
      * @param request uidSession
      * @return List Family
      */
-    @RequestMapping(value = "families", method = RequestMethod.POST)
+    @RequestMapping(value = "families", method = RequestMethod.GET)
     public @ResponseBody
     List<Family> getFamilies(
             HttpServletRequest request
@@ -114,10 +114,10 @@ public class FamilyController {
      * @return Object Family
      */
 
-    @RequestMapping(value = "families/outFamily/{fid}", method = RequestMethod.POST)
-    public @ResponseBody
-    Family outFamily(
-            @PathVariable("fid") Long fid,
+    @RequestMapping(value = "families/outFamily", method = RequestMethod.POST)
+    @ResponseBody
+    public Family outFamily(
+            Long fid,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession();
@@ -132,11 +132,11 @@ public class FamilyController {
      * @param request uidSession
      * @return Object  Family
      */
-    @RequestMapping(value = "families/invitation/{tel}/{fid}", method = RequestMethod.POST)
-    public @ResponseBody
-    Family invitation(
-            @PathVariable("tel") String tel,
-            @PathVariable("fid") Long fid,
+    @RequestMapping(value = "families/invitation", method = RequestMethod.POST)
+    @ResponseBody
+    public Family invitation(
+            String tel,
+            Long fid,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession();

@@ -38,9 +38,9 @@ public class IceBoxController {
      * @param macip 冰箱唯一标识
      * @return IceBox
      */
-    @RequestMapping(value = "/geticeboxinfo/{macip}", method = RequestMethod.POST)
+    @RequestMapping(value = "/geticeboxinfo", method = RequestMethod.POST)
     @ResponseBody
-    public IceBox query(@PathVariable("macip") String macip) {
+    public IceBox query(String macip) {
         return iceBoxRepository.getIceBoxByIceId(macip);
     }
 
@@ -108,11 +108,9 @@ public class IceBoxController {
      * @param iceId 冰箱参数
      * @return 返回冰箱实体 iceBox
      */
-    @RequestMapping(value = "iceboxes/delect/{iceId}", method = RequestMethod.POST)
-    public @ResponseBody
-    IceBox delect(
-            @PathVariable("iceID")String iceId
-    ){
+    @RequestMapping(value = "iceboxes/delect", method = RequestMethod.POST)
+    @ResponseBody
+    public IceBox delect(String iceId){
         return iceBoxRepository.deleteByIceId(iceId);
     }
 
@@ -120,9 +118,9 @@ public class IceBoxController {
     /**
      * 获取我的所有冰箱id
      * @param request 请求session
-     * @return {code:0/1,msg:成功/没有冰箱,iceId:仅成功时返回}
+     * @return {code:1/0,msg:成功/没有冰箱,iceId:仅成功时返回}
      */
-    @RequestMapping(value = "iceboxes/getmyiceboxid", method = RequestMethod.POST)
+    @RequestMapping(value = "iceboxes/getmyiceboxid", method = RequestMethod.GET)
     public @ResponseBody
     Map<String,Object> getBoxId(HttpServletRequest request){
         ArrayList<String> list = new ArrayList<String>();
@@ -139,7 +137,7 @@ public class IceBoxController {
                 System.out.println(("fid为" + fid));
                 List<IceBox> iceBoxes = iceBoxRepository.getAllByFid(fid);
                 for(int j = 0; j < iceBoxes.size(); j++){
-                    IceBox iceBox = iceBoxes.get(i);
+                    IceBox iceBox = iceBoxes.get(j);
                     String iceId = iceBox.getIceId();
                     list.add(iceId);
                 }

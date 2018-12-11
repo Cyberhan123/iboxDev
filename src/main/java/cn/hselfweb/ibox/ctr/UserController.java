@@ -31,10 +31,10 @@ public class UserController {
      * @param macip 冰箱唯一标识
      * @return 订阅者信息列表
      */
-    @RequestMapping(value = "users/geticeboxuserinfo/{macip}", method = RequestMethod.GET)
-    public @ResponseBody
-    List<IceOrder>  getIceBoxUserInfo(
-            @PathVariable("macip") String macip
+    @RequestMapping(value = "users/geticeboxuserinfo", method = RequestMethod.POST)
+    @ResponseBody
+    public List<IceOrder>  getIceBoxUserInfo(
+            String macip
     ) {
         System.out.println("helloworld");
         List<IceOrder> iceOrders = new ArrayList<IceOrder>();
@@ -90,8 +90,8 @@ public class UserController {
      * @return 用户信息
      */
     @RequestMapping(value = "users/getUserInfo", method = RequestMethod.POST)
-    public @ResponseBody
-    User getUserInfo(
+    @ResponseBody
+    public User getUserInfo(
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession();

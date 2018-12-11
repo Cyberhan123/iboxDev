@@ -48,9 +48,9 @@ public class FoodController {
      * @param macip 冰箱唯一标识
      * @return 食物信息列表
      */
-    @RequestMapping(value = "/foods/getallfoodlist/{macip}", method = RequestMethod.POST)
-    public @ResponseBody
-    Map<String,Object> getAllFoodlist(@PathVariable("macip") String macip) {
+    @RequestMapping(value = "/foods/getallfoodlist", params={"macip"},method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> getAllFoodlist(String macip) {
 
         HashMap<String,Object> map = new HashMap<>();
         System.out.println("已进入获取食物列表");
@@ -138,22 +138,22 @@ public class FoodController {
      * @param taretWeight 皮重
      * @return 返回操作成功或者失败
      */
-    @RequestMapping(value = "/foods/putFoodDataIn/{macip}/{foodName}/{UUId}/{comment}/{foodTime}/{type}/{opFlag}/{opDate}/{foodphoto}/{foodWeight}/{foodParent}/{foodPercent}/{taretWeight}", method = RequestMethod.POST)
-    public @ResponseBody
-    List<String> putFoodData(
-            @PathVariable("macip") String macip,
-            @PathVariable("foodName") String foodName,
-            @PathVariable("UUId") String uuid,
-            @PathVariable("comment") String comment,
-            @PathVariable("foodTime") Long foodTime,
-            @PathVariable("type") Long type,
-            @PathVariable("opFlag") Long opFlag,
-            @PathVariable("opDate") Date opDate,
-            @PathVariable("foodParent") Long foodParent,
-            @PathVariable("foodphoto") String foodPhoto,
-            @PathVariable("foodWeight") Long foodWeight,
-            @PathVariable("foodPercent") double foodPercent,
-            @PathVariable("taretWeight") Long taretWeight
+    @RequestMapping(value = "/foods/putFoodDataIn", method = RequestMethod.POST)
+    @ResponseBody
+    public List<String> putFoodData(
+            String macip,
+            String foodName,
+            String uuid,
+            String comment,
+            Long foodTime,
+            Long type,
+            Long opFlag,
+            Date opDate,
+            Long foodParent,
+            String foodPhoto,
+            Long foodWeight,
+            double foodPercent,
+            Long taretWeight
     ) {
         List<String> message = new ArrayList<>();
         Long foodId = (Calendar.getInstance().getTimeInMillis());

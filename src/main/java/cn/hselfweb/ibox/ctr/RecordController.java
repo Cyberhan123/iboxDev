@@ -28,12 +28,11 @@ public class RecordController {
 
     /**
      * 取出操作
-     * @param version 当前接口版本
      * @param iceId   冰箱的id 就是macip
      * @param uuid    uuid 就是卡牌id
      * @return 是否正确取出
      */
-    @RequestMapping(value = "records/putfooddataout/{version}/{macip}/{uuid}", method = RequestMethod.POST)
+    @RequestMapping(value = "records/putfooddataout", method = RequestMethod.POST)
     public @ResponseBody
     ResponseEntity<?> putFoodDataOut(
             @PathVariable("version") String version,
